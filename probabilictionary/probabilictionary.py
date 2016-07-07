@@ -2,12 +2,26 @@ debug = True
 
 
 class Probabilictionary():
-    def __init__(self, events):
-        self.events = [set(event) for event in events]
+    def __init__(self, events, ordered=False):
+        if ordered:
+            from ordered_set import OrderedSet
+            set_constructor = OrderedSet
+        else:
+            set_constructor = set
+
+        self.ordered = ordered
+
+        self.S = {outcome for event in events for outcome in event}
+
+        self.events = [set_constructor(event) for event in events]
 
     def __getitem__(self, key):
-        return Probabilictionary([event - set(key) for event in self.events if key in event])
-        # return [event - set(key) for event in self.events if key in event]
+        if self.ordered:
+            factored_subspaces = [event - {key} for event in self.events if key == event[0]]
+        else:
+            factored_subspaces = [event - {key} for event in self.events if key in event]
+
+        return Probabilictionary(factored_subspaces, ordered=self.ordered)
 
     def __repr__(self):
         return str(self.events)
