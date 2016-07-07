@@ -4,6 +4,9 @@ setup(
     name='Probabilictionary',
     version='0.0.1',
     packages=['probabilictionary'],
+    install_requires=[
+        'ordered-set'
+    ],
     url='https://github.com/datalib/Probabilictionary',
     license='',
     author='rodrigo',
